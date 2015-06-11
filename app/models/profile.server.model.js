@@ -54,7 +54,7 @@ var ProfileSchema = new Schema({
  */
 ProfileSchema.statics.findUniqueGitID = function (callback) {
   var _this = this;
-  var gitID = utils.uuid(32);
+  var gitID = utils.uid(32);
 
   _this.findOne({
     gitID: gitID

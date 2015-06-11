@@ -11,8 +11,8 @@ module.exports = function (app) {
 
   app.route('/profiles/:profileID')
     .get(profiles.read)
-    .put(profiles.hasAuthorization, profiles.update)
-    .delete(profiles.hasAuthorization, profiles.delete);
+    .put(profiles.update)
+    .delete(profiles.delete);
 
   // Finish by binding the article middleware
   app.param('profileID', profiles.profileByID);

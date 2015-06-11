@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
   _ = require('lodash');
 
 
-export.find = function (providerID, providerKey, done) {
+exports.find = function (providerID, providerKey, next) {
   Profile.findOne({
     providerID: providerID,
     providerKey: providerKey
@@ -17,11 +17,23 @@ export.find = function (providerID, providerKey, done) {
   });
 };
 
-exports.profileByID = function (id, next) {
+exports.profileByID = function (req, res, next) {
+  var id = '';
+  if (req.params && req.params.profileID) {
+    id = req.params.profileID;
+  }
+
   Profile.findOne({
     _id: id
   }).exec(function (err, profile) {
-    next(err, profile);
+    if (err) {
+      return next(err);
+    }
+    if (!profile) {
+      return next(new Error('Failed to load Profile ' + id));
+    }
+    req.profile = profile;
+    next();
   });
 };
 
@@ -29,8 +41,9 @@ exports.profileByID = function (id, next) {
  * Create a Profile
  */
 exports.create = function (req, res) {
+  var self = module.exports;
   var profile = new Profile(req.body);
-  this.find(profile.providerID, profile.providerKey, function (err, existingProfile) {
+  self.find(profile.providerID, profile.providerKey, function (err, existingProfile) {
     if (err) {
       res.status(500).send('Error while looking up for profile');
     }
@@ -64,6 +77,12 @@ exports.update = function (req, res) {
 /**
  * Delete an Profile
  */
-exports.delete = function (req, res) {
-
+exports.delete = function (req, res, next) {
+  Profile.remove(req.profile)
+    .exec(function (err) {
+      if (err) {
+        res.status(500).send();
+      }
+      res.send();
+    });
 };
