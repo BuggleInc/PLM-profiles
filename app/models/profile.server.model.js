@@ -43,6 +43,13 @@ var ProfileSchema = new Schema({
     type: String,
     trim: true
   },
+  updated: {
+    type: Date
+  },
+  created: {
+    type: Date,
+    default: Date.now
+  },
   gitID: {
     type: String,
     trim: true

@@ -71,7 +71,21 @@ exports.read = function (req, res) {
  * Update a Profile
  */
 exports.update = function (req, res) {
+  var profile = req.profile;
+  if (profile) {
+    // Merge existing profile
+    profile = _.extend(profile, req.body);
+    profile.updated = Date.now();
+    profile.fullName = profile.firstName + ' ' + profile.lastName;
 
+    profile.save(function (err) {
+      if (err) {
+        res.status(500).send('Error while update profile');
+      } else {
+        res.json(profile);
+      }
+    });
+  }
 };
 
 /**
