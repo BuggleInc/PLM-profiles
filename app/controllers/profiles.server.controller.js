@@ -64,7 +64,7 @@ exports.create = function (req, res) {
  * Show the current Profile
  */
 exports.read = function (req, res) {
-
+  res.json(req.profile);
 };
 
 /**
@@ -72,20 +72,18 @@ exports.read = function (req, res) {
  */
 exports.update = function (req, res) {
   var profile = req.profile;
-  if (profile) {
-    // Merge existing profile
-    profile = _.extend(profile, req.body);
-    profile.updated = Date.now();
-    profile.fullName = profile.firstName + ' ' + profile.lastName;
+  // Merge existing profile
+  profile = _.extend(profile, req.body);
+  profile.updated = Date.now();
+  profile.fullName = profile.firstName + ' ' + profile.lastName;
 
-    profile.save(function (err) {
-      if (err) {
-        res.status(500).send('Error while update profile');
-      } else {
-        res.json(profile);
-      }
-    });
-  }
+  profile.save(function (err) {
+    if (err) {
+      res.status(500).send('Error while update profile');
+    } else {
+      res.json(profile);
+    }
+  });
 };
 
 /**
