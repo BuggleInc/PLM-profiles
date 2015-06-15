@@ -5,15 +5,15 @@
 var profiles = require('../../app/controllers/profiles.server.controller');
 
 module.exports = function (app) {
+
+  app.use('/profiles/:providerID/:providerKey', profiles.find);
+
   // Article Routes
   app.route('/profiles')
     .post(profiles.create);
 
-  app.route('/profiles/:profileID')
+  app.route('/profiles/:providerID/:providerKey')
     .get(profiles.read)
     .put(profiles.update)
     .delete(profiles.delete);
-
-  // Finish by binding the article middleware
-  app.param('profileID', profiles.profileByID);
 };

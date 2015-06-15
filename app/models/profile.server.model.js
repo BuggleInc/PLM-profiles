@@ -11,13 +11,19 @@ var mongoose = require('mongoose'),
  * Profile Schema
  */
 var ProfileSchema = new Schema({
-  providerID: {
+  userID: {
     type: String,
     trim: true
   },
-  providerKey: {
-    type: String,
-    trim: true
+  loginInfo: {
+    providerID: {
+      type: String,
+      trim: true
+    },
+    providerKey: {
+      type: String,
+      trim: true
+    }
   },
   firstName: {
     type: String,
@@ -36,8 +42,10 @@ var ProfileSchema = new Schema({
     trim: true
   },
   preferredLang: {
-    type: String,
-    trim: true
+    code: {
+      type: String,
+      trim: true
+    }
   },
   avatarURL: {
     type: String,
@@ -61,7 +69,7 @@ var ProfileSchema = new Schema({
  */
 ProfileSchema.statics.findUniqueGitID = function (callback) {
   var _this = this;
-  var gitID = utils.uid(32);
+  var gitID = utils.guid();
 
   _this.findOne({
     gitID: gitID
