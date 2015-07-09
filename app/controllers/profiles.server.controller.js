@@ -32,6 +32,7 @@ exports.create = function (req, res) {
   var profile = new Profile(req.body);
   Profile.findUniqueGitID(function (gitID) {
     profile.gitID = gitID;
+    profile.fullName = profile.firstName + ' ' + profile.lastName;
     profile.save(function (err) {
       res.json({
         profile: profile
