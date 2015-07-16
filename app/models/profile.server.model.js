@@ -61,6 +61,9 @@ var ProfileSchema = new Schema({
   gitID: {
     type: String,
     trim: true
+  },
+  trackUser: {
+    type: Boolean
   }
 });
 
