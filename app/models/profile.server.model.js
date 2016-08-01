@@ -41,6 +41,10 @@ var ProfileSchema = new Schema({
     type: String,
     trim: true
   },
+  lastProgLang: {
+    type: String,
+    trim: true
+  },
   preferredLang: {
     code: {
       type: String,
