@@ -46,13 +46,13 @@ exports.update = function (req, res) {
     { _id: profile._id },
     { $set: profile },
     function (err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    }
-    res.json(profile);
-  });
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+      res.json(profile);
+    });
 };
 
 /**
