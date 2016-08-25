@@ -25,14 +25,6 @@ var ProfileSchema = new Schema({
       trim: true
     }
   },
-  firstName: {
-    type: String,
-    trim: true
-  },
-  lastName: {
-    type: String,
-    trim: true
-  },
   fullName: {
     type: String,
     trim: true
