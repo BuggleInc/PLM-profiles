@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var path = require('path'),
+  passport = require('passport'),
   mongoose = require('mongoose'),
   _ = require('lodash'),
   Profile = mongoose.model('Profile'),
@@ -74,26 +75,29 @@ exports.delete = function (req, res) {
 /**
  * List of profiles
  */
-exports.list = function (req, res) {
-  var query = {};
-  if(req.query.since || req.query.until) {
-    query.created = {};
-    if(req.query.since) {
-      query.created.$gte = new Date(req.query.since);
+exports.list = [
+  passport.authenticate('local', { session: false }),
+  function (req, res) {
+    var query = {};
+    if(req.query.since || req.query.until) {
+      query.created = {};
+      if(req.query.since) {
+        query.created.$gte = new Date(req.query.since);
+      }
+      if(req.query.until) {
+        query.created.$lt = new Date(req.query.until);
+      }
     }
-    if(req.query.until) {
-      query.created.$lt = new Date(req.query.until);
-    }
+    Profile.find(query).sort('-created').exec(function (err, profiles) {
+      if (err) {
+        return res.status(400).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+      res.json(profiles);
+    });
   }
-  Profile.find(query).sort('-created').exec(function (err, profiles) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    }
-    res.json(profiles);
-  });
-};
+];
 
 /**
  * Profile middleware

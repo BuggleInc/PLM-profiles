@@ -8,6 +8,7 @@ var profiles = require('../controllers/profiles.server.controller');
 module.exports = function (app) {
   // Profiles collection routes
   app.route('/api/profiles')
+    .get(profiles.list)
     .post(profiles.create);
 
   // Single profile routes
