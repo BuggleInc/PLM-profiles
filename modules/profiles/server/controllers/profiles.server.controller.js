@@ -75,7 +75,17 @@ exports.delete = function (req, res) {
  * List of profiles
  */
 exports.list = function (req, res) {
-  Profile.find().sort('-created').exec(function (err, profiles) {
+  var query = {};
+  if(req.query.since || req.query.until) {
+    query.created = {};
+    if(req.query.since) {
+      query.created.$gte = new Date(req.query.since);
+    }
+    if(req.query.until) {
+      query.created.$lt = new Date(req.query.until);
+    }
+  }
+  Profile.find(query).sort('-created').exec(function (err, profiles) {
     if (err) {
       return res.status(400).send({
         message: errorHandler.getErrorMessage(err)
