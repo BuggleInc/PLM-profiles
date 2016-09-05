@@ -68,15 +68,10 @@ var ProfileSchema = new Schema({
  */
 ProfileSchema.pre('save', function (next) {
   var self = this,
-    searchQuery,
     cb;
 
   // Only needed on first save
   if (this.isNew) {
-    searchQuery = {
-      gitID: self.gitID
-    };
-
     // Check if gitID already exists
     // Generate a new one and retry if it does
     cb = function (err, profile) {
@@ -86,7 +81,7 @@ ProfileSchema.pre('save', function (next) {
       if (profile) {
         // A profile with this gitID already exists, retry
         self.gitID = uuid.v4();
-        self.constructor.findOne(searchQuery, cb);
+        self.constructor.findOne({ gitID: self.gitID }, cb);
       } else {
         next();
       }
@@ -94,7 +89,7 @@ ProfileSchema.pre('save', function (next) {
 
     // First try
     this.gitID = uuid.v4();
-    this.constructor.findOne(searchQuery, cb);
+    this.constructor.findOne({ gitID: this.gitID }, cb);
   }
 });
 
