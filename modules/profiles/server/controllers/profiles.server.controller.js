@@ -94,6 +94,7 @@ exports.list = [
           message: errorHandler.getErrorMessage(err)
         });
       }
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.json(profiles);
     });
   }
